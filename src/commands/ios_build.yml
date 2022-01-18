@@ -40,7 +40,20 @@ steps:
 
   - run:
       name: Build iOS App
-      command: "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -<<parameters.project_type>> <<parameters.project_path>> -destination 'platform=iOS Simulator,name=<<parameters.device>>' -scheme <<parameters.scheme>> -parallelizeTargets -configuration <<parameters.build_configuration>> -derivedDataPath <<parameters.derived_data_path>>  -UseModernBuildSystem=YES | xcpretty -k"
+      environment:
+        RCT_NO_LAUNCH_PACKAGER: 'true'
+      command: >-
+        mkdir -p /tmp/logs && xcodebuild -<<parameters.project_type>>
+        <<parameters.project_path>> -destination 'platform=iOS
+        Simulator,name=<<parameters.device>>' -scheme <<parameters.scheme>>
+        -parallelizeTargets -configuration <<parameters.build_configuration>>
+        -derivedDataPath <<parameters.derived_data_path>>
+        -UseModernBuildSystem=YES | tee /tmp/logs/xcodebuild.log | xcpretty -k
+
+  - store_artifacts:
+      name: Store full logs
+      path: /tmp/logs
+      destination: logs
 
   - when:
       condition: <<parameters.cache>>
