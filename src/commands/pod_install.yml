@@ -24,8 +24,8 @@ steps:
               - cache-pods-
   - run:
       name: Install CocoaPods
-      command: |
-        cd <<parameters.pod_install_directory>> && pod install && cd -
+      working_directory: <<parameters.pod_install_directory>>
+      command: pod install
   - when:
       condition: <<parameters.cache>>
       steps:
