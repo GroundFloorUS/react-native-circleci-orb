@@ -32,4 +32,6 @@ steps:
         - save_cache:
             paths:
               - <<parameters.pod_install_directory>>/Pods
+              - '~/Library/Caches/CocoaPods'
+              - '~/.cocoapods'
             key: cache-pods-{{ checksum "<<parameters.pod_install_directory>>/Podfile.lock" }}-{{ .Environment.CACHE_VERSION }}
