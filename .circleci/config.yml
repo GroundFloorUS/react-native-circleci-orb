@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   cli: circleci/circleci-cli@0.1.2
-  orb-tools: circleci/orb-tools@2
+  orb-tools: circleci/orb-tools@10.1.0
 
 jobs:
   pack:
@@ -56,19 +56,11 @@ workflows:
     jobs:
       - pack
 
-      - orb-tools/publish:
+      - orb-tools/publish-dev:
           orb-path: packed-orb.yml
-          orb-ref: "react-native-community/react-native@dev:${CIRCLE_BRANCH}"
-          publish-token-variable: CIRCLECI_API_TOKEN
-          attach-workspace: true
-          checkout: false
+          orb-name: "GroundFloorUS/react-native"
+          workspace-root: .
           requires: [pack]
           filters:
             branches:
               ignore: master
-
-      - publish:
-          requires: [pack]
-          filters:
-            branches:
-              only: master
