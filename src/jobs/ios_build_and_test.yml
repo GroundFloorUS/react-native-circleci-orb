@@ -1,9 +1,14 @@
 description: Builds the iOS app at the given path with the given build scheme and configuration and then runs the tests with the Detox configuration given.
 
-executor: macos
+executor: <<parameters.executor>>
 
 parameters:
   # For this job
+  executor:
+    default: macos
+    description: >-
+      The executor to run this job. Must be a macOS executor to function properly.
+    type: executor
   checkout:
     description: Boolean for whether or not to checkout as a first step. Default is false.
     type: boolean
