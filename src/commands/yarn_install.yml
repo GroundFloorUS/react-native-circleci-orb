@@ -1,4 +1,4 @@
-description: Install Javascript dependencies using Yarn. This command correctly configures the cache for any number of package.json and yarn.lock files.
+description: Install JavaScript dependencies using Yarn. This command correctly configures the cache for any number of package.json and yarn.lock files.
 
 parameters:
   cache:
@@ -22,11 +22,12 @@ steps:
             name: Create cache checksum file
             command: |
               mkdir -p ~/.tmp/checksumfiles
-              find . -type f -name 'package.json' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/package.json
-              find . -type f -name 'yarn.lock' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/yarn.lock
+              find . -type f -name 'package.json' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/js-dependencies
+              find . -type f -name 'yarn.lock' -not -path "*node_modules*" -exec cat {} + >> ~/.tmp/checksumfiles/js-dependencies
         - restore_cache:
             keys:
-              - yarn-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/package.json" }}-{{ checksum "~/.tmp/checksumfiles/yarn.lock" }}-{{ .Environment.CACHE_VERSION }}
+              - yarn-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-{{ checksum "~/.tmp/checksumfiles/js-dependencies" }}
+              - yarn-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-
   - when:
       condition:
         equal: ["", <<parameters.yarn_install_directory>>]
@@ -48,4 +49,4 @@ steps:
             paths:
               - <<parameters.cache_folder>>
             key: |
-              yarn-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/package.json" }}-{{ checksum "~/.tmp/checksumfiles/yarn.lock" }}-{{ .Environment.CACHE_VERSION }}
+              yarn-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-{{ checksum "~/.tmp/checksumfiles/js-dependencies" }}

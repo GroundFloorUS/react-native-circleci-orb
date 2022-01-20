@@ -36,7 +36,9 @@ steps:
         - restore_cache:
             name: Restoring iOS Build caches
             keys:
-              - ios-build-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/package.json" }}-{{ .Environment.CACHE_VERSION }}
+              - ios-build-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-{{ checksum "~/.tmp/checksumfiles/js-dependencies" }}-{{ .Revision }}
+              - ios-build-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-{{ checksum "~/.tmp/checksumfiles/js-dependencies" }}-
+              - ios-build-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-
 
   - run:
       name: Build iOS App
@@ -62,5 +64,5 @@ steps:
             name: Saving iOS Build Cache
             paths:
               - <<parameters.derived_data_path>>/Build
-            key: ios-build-cache-{{ arch }}-{{ checksum "~/.tmp/checksumfiles/package.json" }}-{{ .Environment.CACHE_VERSION }}
+            key: ios-build-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-{{ checksum "~/.tmp/checksumfiles/js-dependencies" }}-{{ .Revision }}
             when: always
